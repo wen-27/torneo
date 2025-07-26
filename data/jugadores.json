@@ -1,0 +1,13 @@
+[
+    {
+        "id": 1,
+        "nombre": "UUU",
+        "posicion": "DEFENSA",
+        "dorsal": 23,
+        "equipo_id": 1,
+        "goles": 0,
+        "asistencias": 0,
+        "tarjetas_amarillas": 0,
+        "tarjetas_rojas": 0
+    }
+]
