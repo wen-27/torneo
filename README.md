@@ -1,94 +1,136 @@
-# Sistema de Gestión de Torneos Deportivos ⚽🏆
-### Proyecto desarrollado por Wendy Angélica Vega Sánchez  
-### Grupo J3 | Correo: wendyangelicavegasanchez@gmail.com
+Sistema de Gestión de Torneos Deportivos ⚽🏆
+Proyecto desarrollado por Wendy Angélica Vega Sánchez
+Grupo J3 | 📧 Correo: wendyangelicavegasanchez@gmail.com
 
-![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)
-![Status](https://img.shields.io/badge/Estado-Activo-brightgreen.svg)
-![License](https://img.shields.io/badge/Licencia-Academica-yellow.svg)
+https://img.shields.io/badge/Python-3.12+-blue.svg
+https://img.shields.io/badge/Estado-Activo-brightgreen.svg
+https://img.shields.io/badge/Licencia-Acad%C3%A9mica-yellow.svg
 
-## Tabla de Contenidos 📑
-1. [Descripción](#descripción-)
-2. [Características](#características-principales-)
-3. [Tecnologías](#tecnologías-)
-4. [Instalación](#instalación-)
-6. [Estructura](#estructura-del-proyecto-)
-7. [Validaciones](#validaciones-implementadas-)
-8. [Contacto](#contacto-)
+📑 Tabla de Contenidos
+Descripción
 
-## Descripción 📝
-Sistema completo para la administración de torneos deportivos desarrollado como proyecto académico para el Grupo J3. Permite gestionar equipos, jugadores, cuerpo técnico, partidos y estadísticas.
+Características
 
-## Características Principales ✨
-| Módulo | Funcionalidades |
-|--------|----------------|
-| Equipos | Registro, edición, eliminación y listado |
-| Jugadores | Gestión completa con validación de dorsales |
-| Técnicos | Administración de roles y equipos |
-| Torneos | Creación, programación de partidos y seguimiento |
-| Estadísticas | Reportes detallados y análisis |
+Tecnologías
 
-## Tecnologías 💻
-- Python 3.12.1
-- Estructura modular
-- Almacenamiento en JSON
-- Interfaz de consola interactiva
+Instalación
 
-## Instalación 🛠️
-```bash
-# Clonar repositorio
+Uso
+
+Estructura
+
+Validaciones
+
+Capturas
+
+Contacto
+
+📝 Descripción
+Sistema completo para la administración de torneos deportivos desarrollado como proyecto académico para el Grupo J3. Permite gestionar equipos, jugadores, cuerpo técnico, partidos y estadísticas de manera integrada.
+
+✨ Características Principales
+Gestión de Equipos
+Registro de nuevos equipos
+
+Edición de información existente
+
+Eliminación de equipos
+
+Listado completo con filtros
+
+Administración de Jugadores
+Alta/baja de jugadores
+
+Asignación de dorsales
+
+Control por equipos
+
+Estadísticas individuales
+
+Cuerpo Técnico
+Registro de entrenadores
+
+Asignación de roles
+
+Vinculación con equipos
+
+Gestión de contrataciones
+
+💻 Tecnologías
+Python 3.12.1: Lenguaje principal
+
+JSON: Almacenamiento de datos
+
+POO: Programación Orientada a Objetos
+
+CLI: Interfaz de línea de comandos
+
+🛠️ Instalación
+Clonar repositorio:
+
+bash
 git clone https://github.com/tu-usuario/torneo-j3.git
-
-# Navegar al directorio
 cd torneo-j3
+Ejecutar el sistema:
 
-# Ejecutar el sistema
+bash
 python main.py
-Uso 🖥️
-python
+🖥️ Uso
+El sistema muestra un menú interactivo:
+
+text
 === MENÚ PRINCIPAL ===
 1. Gestión de Equipos
-2. Gestión de Jugadores
+2. Jugadores
 3. Cuerpo Técnico
-4. Torneos y Partidos
-5. Estadísticas
-6. Salir
-## Estructura del Proyecto 🌐
+4. Torneos
+5. Partidos
+6. Estadísticas
+7. Salir
+Seleccione opción:
+🌐 Estructura del Proyecto
 text
 torneo-j3/
 ├── data/
-│   ├── equipos.json       # Datos de equipos
-│   ├── jugadores.json     # Registro de jugadores
-│   └── torneos.json       # Información de torneos
+│   ├── equipos.json
+│   ├── jugadores.json
+│   └── torneos.json
 ├── src/
-│   ├── core/              # Módulos principales
+│   ├── core/
 │   │   ├── equipos.py
 │   │   ├── jugadores.py
 │   │   └── torneos.py
-│   └── utils/             # Utilidades
+│   └── utils/
 │       ├── file_manager.py
 │       └── validators.py
-└── main.py                # Punto de entrada
-## Validaciones Implementadas ✅
-Datos obligatorios: Campos requeridos en todos los formularios
+└── main.py
+✅ Validaciones Implementadas
+Datos Obligatorios
+Nombre de equipos
 
-Formatos específicos:
+Fechas de nacimiento
 
-Fechas (YYYY-MM-DD)
+Números de dorsal
 
-Horas (HH:MM)
+Formatos Específicos
+Campo	Formato
+Fecha	YYYY-MM-DD
+Hora	HH:MM
+Dorsal	Número entero
+Reglas de Negocio
+Máximo 25 jugadores por equipo
 
-Lógica de negocio:
+No duplicación de dorsales
 
-Dorsales únicos por equipo
+Validación de fechas (inicio < fin)
 
-No conflictos en horarios de partidos
+📸 Capturas de Pantalla
+(Espacio para agregar imágenes del sistema en funcionamiento)
 
-Mínimo 2 equipos por torneo
-
-
-## Contacto 📧
+📧 Contacto
 Wendy Angélica Vega Sánchez
 📧 wendyangelicavegasanchez@gmail.com
 📚 Grupo J3
+🏫 Institución Educativa
 📅 Julio 2023
 
