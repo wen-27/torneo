@@ -11,7 +11,6 @@
 2. [Características](#características-principales-)
 3. [Tecnologías](#tecnologías-)
 4. [Instalación](#instalación-)
-5. [Uso](#uso-)
 6. [Estructura](#estructura-del-proyecto-)
 7. [Validaciones](#validaciones-implementadas-)
 8. [Contacto](#contacto-)
@@ -53,7 +52,7 @@ python
 4. Torneos y Partidos
 5. Estadísticas
 6. Salir
-Estructura del Proyecto 🌐
+# # Estructura del Proyecto 🌐
 text
 torneo-j3/
 ├── data/
@@ -69,7 +68,7 @@ torneo-j3/
 │       ├── file_manager.py
 │       └── validators.py
 └── main.py                # Punto de entrada
-Validaciones Implementadas ✅
+# # Validaciones Implementadas ✅
 Datos obligatorios: Campos requeridos en todos los formularios
 
 Formatos específicos:
@@ -86,10 +85,8 @@ No conflictos en horarios de partidos
 
 Mínimo 2 equipos por torneo
 
-Capturas de Pantalla 🖼️
-(Espacio para agregar imágenes del sistema en funcionamiento)
 
-Contacto 📧
+# # Contacto 📧
 Wendy Angélica Vega Sánchez
 📧 wendyangelicavegasanchez@gmail.com
 📚 Grupo J3
