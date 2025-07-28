@@ -1,136 +1,69 @@
-Sistema de Gestión de Torneos Deportivos ⚽🏆
-Proyecto desarrollado por Wendy Angélica Vega Sánchez
-Grupo J3 | 📧 Correo: wendyangelicavegasanchez@gmail.com
+# Sistema de Torneos Deportivos
 
-https://img.shields.io/badge/Python-3.12+-blue.svg
-https://img.shields.io/badge/Estado-Activo-brightgreen.svg
-https://img.shields.io/badge/Licencia-Acad%C3%A9mica-yellow.svg
+Un programa para gestionar equipos, jugadores y torneos deportivos.
 
-📑 Tabla de Contenidos
-Descripción
+## 📋 Contenido
+1. [Cómo usar](#-cómo-usar)
+2. [Cómo instalarlo](#-cómo-instalarlo)
+3. [Partes del sistema](#-partes-del-sistema)
+4. [Validaciones](#-validaciones)
+5. [Contacto](#-contacto)
 
-Características
+## 🖥️ Cómo usar
 
-Tecnologías
+Al abrir el programa verás este menú:
+Equipos
 
-Instalación
+Jugadores
 
-Uso
+Entrenadores
 
-Estructura
+Torneos
 
-Validaciones
+Partidos
 
-Capturas
-
-Contacto
-
-📝 Descripción
-Sistema completo para la administración de torneos deportivos desarrollado como proyecto académico para el Grupo J3. Permite gestionar equipos, jugadores, cuerpo técnico, partidos y estadísticas de manera integrada.
-
-✨ Características Principales
-Gestión de Equipos
-Registro de nuevos equipos
-
-Edición de información existente
-
-Eliminación de equipos
-
-Listado completo con filtros
-
-Administración de Jugadores
-Alta/baja de jugadores
-
-Asignación de dorsales
-
-Control por equipos
-
-Estadísticas individuales
-
-Cuerpo Técnico
-Registro de entrenadores
-
-Asignación de roles
-
-Vinculación con equipos
-
-Gestión de contrataciones
-
-💻 Tecnologías
-Python 3.12.1: Lenguaje principal
-
-JSON: Almacenamiento de datos
-
-POO: Programación Orientada a Objetos
-
-CLI: Interfaz de línea de comandos
-
-🛠️ Instalación
-Clonar repositorio:
-
-bash
-git clone https://github.com/tu-usuario/torneo-j3.git
-cd torneo-j3
-Ejecutar el sistema:
-
-bash
-python main.py
-🖥️ Uso
-El sistema muestra un menú interactivo:
+Salir
 
 text
-=== MENÚ PRINCIPAL ===
-1. Gestión de Equipos
-2. Jugadores
-3. Cuerpo Técnico
-4. Torneos
-5. Partidos
-6. Estadísticas
-7. Salir
-Seleccione opción:
-🌐 Estructura del Proyecto
-text
-torneo-j3/
-├── data/
-│   ├── equipos.json
-│   ├── jugadores.json
-│   └── torneos.json
-├── src/
-│   ├── core/
-│   │   ├── equipos.py
-│   │   ├── jugadores.py
-│   │   └── torneos.py
-│   └── utils/
-│       ├── file_manager.py
-│       └── validators.py
-└── main.py
-✅ Validaciones Implementadas
-Datos Obligatorios
-Nombre de equipos
 
-Fechas de nacimiento
+Elige un número para acceder a cada opción.
 
-Números de dorsal
+## 💾 Cómo instalarlo
 
-Formatos Específicos
-Campo	Formato
-Fecha	YYYY-MM-DD
-Hora	HH:MM
-Dorsal	Número entero
-Reglas de Negocio
-Máximo 25 jugadores por equipo
+1. Descarga los archivos del proyecto
+2. Abre una terminal en la carpeta
+3. Ejecuta:
+   ```bash
+   python main.py
 
-No duplicación de dorsales
+## 📂 Partes del sistema
+El programa tiene estas carpetas principales:
 
-Validación de fechas (inicio < fin)
+/data: Guarda los archivos json
 
-📸 Capturas de Pantalla
-(Espacio para agregar imágenes del sistema en funcionamiento)
+/utils: Contiene el código principal como limpiar pantalla 
 
-📧 Contacto
+/controllers: contiene la informacion principal del programa para que funcione
+
+main.py: Archivo principal para iniciar
+
+## ✔️ Validaciones
+El programa verifica:
+
+Que no falten datos importantes
+
+Que las fechas tengan formato correcto (AAAA-MM-DD)
+
+Que no se repitan números de dorsal en un equipo
+
+me crea torneos 
+
+me permite transferir jugadores
+
+me da las estadisticas de todo
+
+## ✉️ Contacto
+Desarrollado por:
 Wendy Angélica Vega Sánchez
+Grupo J3
 📧 wendyangelicavegasanchez@gmail.com
-📚 Grupo J3
-🏫 Institución Educativa
-📅 Julio 2023
-
