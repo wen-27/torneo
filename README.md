@@ -52,7 +52,7 @@ python
 4. Torneos y Partidos
 5. Estadísticas
 6. Salir
-# # Estructura del Proyecto 🌐
+## Estructura del Proyecto 🌐
 text
 torneo-j3/
 ├── data/
@@ -68,7 +68,7 @@ torneo-j3/
 │       ├── file_manager.py
 │       └── validators.py
 └── main.py                # Punto de entrada
-# # Validaciones Implementadas ✅
+## Validaciones Implementadas ✅
 Datos obligatorios: Campos requeridos en todos los formularios
 
 Formatos específicos:
@@ -86,7 +86,7 @@ No conflictos en horarios de partidos
 Mínimo 2 equipos por torneo
 
 
-# # Contacto 📧
+## Contacto 📧
 Wendy Angélica Vega Sánchez
 📧 wendyangelicavegasanchez@gmail.com
 📚 Grupo J3
