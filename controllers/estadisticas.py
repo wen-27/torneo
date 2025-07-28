@@ -1,188 +1,222 @@
-from utils.helpers import cargar_datos
-from collections import defaultdict
+import os
+import json
+from datetime import datetime
 
+# Constantes
 ARCHIVO_EQUIPOS = "data/equipos.json"
 ARCHIVO_JUGADORES = "data/jugadores.json"
 ARCHIVO_TORNEOS = "data/torneos.json"
 ARCHIVO_PARTIDOS = "data/partidos.json"
 
-def estadisticas_equipos():
-    """
-    Genera y muestra estadísticas detalladas de todos los equipos
-    Retorna: Lista de diccionarios con las estadísticas de cada equipo
-    """
+def cargar_datos(archivo):
+    """Carga datos desde un archivo JSON"""
+    if not os.path.exists(archivo):
+        return []
+    try:
+        with open(archivo, "r", encoding="utf-8") as file:
+            return json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+
+def mostrar_estadisticas_equipos_completas():
+    """Muestra estadísticas extendidas de equipos"""
     equipos = cargar_datos(ARCHIVO_EQUIPOS)
     partidos = cargar_datos(ARCHIVO_PARTIDOS)
-    jugadores = cargar_datos(ARCHIVO_JUGADORES)
     
     if not equipos or not partidos:
-        print("\nNo hay suficientes datos para generar estadísticas de equipos")
-        return []
+        print("\nNo hay suficientes datos para generar estadísticas")
+        return
     
-    # Inicializar estadísticas
-    stats = {}
+    print("\n📊 ESTADÍSTICAS COMPLETAS DE EQUIPOS")
+    print("="*90)
+    print(f"{'Equipo':<20} | {'PJ':<4} | {'PG':<4} | {'PE':<4} | {'PP':<4} | {'GF':<4} | {'GC':<4} | {'DG':<4} | {'Efectividad':<10}")
+    print("-"*90)
+    
     for equipo in equipos:
-        stats[equipo['id']] = {
-            'nombre': equipo['nombre'],
-            'pj': 0, 'pg': 0, 'pe': 0, 'pp': 0,
-            'gf': 0, 'gc': 0, 'dg': 0,
-            'jugadores': 0,
-            'victorias_local': 0,
-            'victorias_visitante': 0
-        }
+        stats = calcular_estadisticas_equipo(equipo['id'], partidos)
+        efectividad = (stats['pg']*3 + stats['pe']) / (stats['pj']*3) * 100 if stats['pj'] > 0 else 0
+        
+        print(f"{equipo['nombre'][:19]:<20} | {stats['pj']:<4} | {stats['pg']:<4} | "
+              f"{stats['pe']:<4} | {stats['pp']:<4} | {stats['gf']:<4} | {stats['gc']:<4} | "
+              f"{stats['gf']-stats['gc']:<4} | {efectividad:.1f}%")
+
+def calcular_estadisticas_equipo(equipo_id, partidos):
+    """Calcula estadísticas para un equipo específico"""
+    stats = {'pj':0, 'pg':0, 'pe':0, 'pp':0, 'gf':0, 'gc':0}
     
-    # Procesar partidos
     for partido in partidos:
         if partido['resultado'] is None:
             continue
             
-        local = partido['local_id']
-        visitante = partido['visitante_id']
-        goles_l = partido['goles_local']
-        goles_v = partido['goles_visitante']
-        
-        # Estadísticas básicas
-        stats[local]['pj'] += 1
-        stats[visitante]['pj'] += 1
-        stats[local]['gf'] += goles_l
-        stats[local]['gc'] += goles_v
-        stats[visitante]['gf'] += goles_v
-        stats[visitante]['gc'] += goles_l
-        
-        # Resultados
-        if goles_l > goles_v:
-            stats[local]['pg'] += 1
-            stats[local]['victorias_local'] += 1
-            stats[visitante]['pp'] += 1
-        elif goles_v > goles_l:
-            stats[visitante]['pg'] += 1
-            stats[visitante]['victorias_visitante'] += 1
-            stats[local]['pp'] += 1
-        else:
-            stats[local]['pe'] += 1
-            stats[visitante]['pe'] += 1
-    
-    # Calcular diferencia de goles y jugadores por equipo
-    for eq_id, eq_data in stats.items():
-        eq_data['dg'] = eq_data['gf'] - eq_data['gc']
-        eq_data['jugadores'] = sum(1 for j in jugadores if j['equipo_id'] == eq_id) if jugadores else 0
-    
-    # Convertir a lista ordenada
-    estadisticas_ordenadas = sorted(stats.values(), 
-                                  key=lambda x: (x['pg']*3 + x['pe'], x['dg'], x['gf']), 
-                                  reverse=True)
-    
-    return estadisticas_ordenadas
+        if partido['local_id'] == equipo_id:
+            stats['pj'] += 1
+            stats['gf'] += partido['goles_local']
+            stats['gc'] += partido['goles_visitante']
+            
+            if partido['goles_local'] > partido['goles_visitante']:
+                stats['pg'] += 1
+            elif partido['goles_local'] == partido['goles_visitante']:
+                stats['pe'] += 1
+            else:
+                stats['pp'] += 1
+                
+        elif partido['visitante_id'] == equipo_id:
+            stats['pj'] += 1
+            stats['gf'] += partido['goles_visitante']
+            stats['gc'] += partido['goles_local']
+            
+            if partido['goles_visitante'] > partido['goles_local']:
+                stats['pg'] += 1
+            elif partido['goles_visitante'] == partido['goles_local']:
+                stats['pe'] += 1
+            else:
+                stats['pp'] += 1
+                
+    return stats
 
-def estadisticas_jugadores():
-    """
-    Genera y muestra estadísticas detalladas de todos los jugadores
-    Retorna: Lista de diccionarios con las estadísticas de cada jugador
-    """
+def mostrar_estadisticas_jugadores_detalladas():
+    """Muestra estadísticas avanzadas de jugadores"""
     jugadores = cargar_datos(ARCHIVO_JUGADORES)
     equipos = cargar_datos(ARCHIVO_EQUIPOS)
     
     if not jugadores:
         print("\nNo hay jugadores registrados")
-        return []
+        return
     
-    stats = []
-    for jugador in jugadores:
-        equipo_nombre = next((e['nombre'] for e in equipos if e['id'] == jugador['equipo_id']), "Desconocido")
-        stats.append({
-            'id': jugador['id'],
-            'nombre': jugador['nombre'],
-            'equipo': equipo_nombre,
-            'posicion': jugador['posicion'],
-            'dorsal': jugador['dorsal'],
-            'goles': jugador.get('goles', 0),
-            'asistencias': jugador.get('asistencias', 0),
-            'tarjetas_amarillas': jugador.get('tarjetas_amarillas', 0),
-            'tarjetas_rojas': jugador.get('tarjetas_rojas', 0),
-            'ratio_gol': jugador.get('goles', 0) / jugador.get('partidos_jugados', 1) if jugador.get('partidos_jugados', 0) > 0 else 0
-        })
+    # Ordenar por goles y luego por asistencias
+    jugadores_ordenados = sorted(
+        jugadores,
+        key=lambda x: (x.get('goles', 0), x.get('asistencias', 0)),
+        reverse=True
+    )
     
-    return sorted(stats, key=lambda x: x['goles'], reverse=True)
+    print("\n⚽ ESTADÍSTICAS DETALLADAS DE JUGADORES")
+    print("="*120)
+    print(f"{'Nombre':<20} | {'Equipo':<20} | {'Posición':<15} | {'Goles':<6} | {'Asist.':<6} | {'TA':<3} | {'TR':<3} | {'Ratio Gol/Part.':<15}")
+    print("-"*120)
+    
+    for jugador in jugadores_ordenados[:20]:  # Mostrar solo los 20 primeros
+        equipo_nombre = next(
+            (e['nombre'] for e in equipos if e['id'] == jugador['equipo_id']),
+            "Desconocido"
+        )
+        ratio = jugador.get('goles', 0) / jugador.get('partidos_jugados', 1) if jugador.get('partidos_jugados', 0) > 0 else 0
+        
+        print(
+            f"{jugador['nombre'][:19]:<20} | {equipo_nombre[:19]:<20} | "
+            f"{jugador['posicion'][:14]:<15} | {jugador.get('goles', 0):<6} | "
+            f"{jugador.get('asistencias', 0):<6} | {jugador.get('tarjetas_amarillas', 0):<3} | "
+            f"{jugador.get('tarjetas_rojas', 0):<3} | {ratio:.2f}"
+        )
 
-def estadisticas_torneos():
-    """
-    Genera y muestra estadísticas detalladas de todos los torneos
-    Retorna: Lista de diccionarios con las estadísticas de cada torneo
-    """
+def mostrar_maximos_goleadores():
+    """Muestra ranking de goleadores y asistentes"""
+    jugadores = cargar_datos(ARCHIVO_JUGADORES)
+    
+    if not jugadores:
+        print("\nNo hay jugadores registrados")
+        return
+    
+    goleadores = sorted(jugadores, key=lambda x: x.get('goles', 0), reverse=True)[:10]
+    asistentes = sorted(jugadores, key=lambda x: x.get('asistencias', 0), reverse=True)[:10]
+    
+    print("\n🏆 TOP 10 GOLEADORES")
+    print("="*60)
+    for i, jug in enumerate(goleadores, 1):
+        print(f"{i}. {jug['nombre'][:25]:<25} - {jug.get('goles', 0)} goles")
+    
+    print("\n🎯 TOP 10 ASISTENTES")
+    print("="*60)
+    for i, jug in enumerate(asistentes, 1):
+        print(f"{i}. {jug['nombre'][:25]:<25} - {jug.get('asistencias', 0)} asistencias")
+
+def mostrar_resumen_torneos():
+    """Muestra resumen de todos los torneos"""
     torneos = cargar_datos(ARCHIVO_TORNEOS)
     partidos = cargar_datos(ARCHIVO_PARTIDOS)
     
     if not torneos:
         print("\nNo hay torneos registrados")
-        return []
+        return
     
-    stats = []
+    print("\n🏅 RESUMEN DE TORNEOS")
+    print("="*90)
+    print(f"{'Torneo':<25} | {'Equipos':<7} | {'Partidos':<8} | {'Completado':<10} | {'Goles Tot.':<9} | {'Prom. Gol':<9}")
+    print("-"*90)
+    
     for torneo in torneos:
         partidos_torneo = [p for p in partidos if p.get('torneo_id') == torneo['id']]
         partidos_jugados = [p for p in partidos_torneo if p.get('resultado') is not None]
+        goles = sum(p['goles_local'] + p['goles_visitante'] for p in partidos_jugados)
+        promedio = goles / len(partidos_jugados) if partidos_jugados else 0
         
-        stats.append({
-            'id': torneo['id'],
-            'nombre': torneo['nombre'],
-            'tipo': torneo['tipo'],
-            'equipos': len(torneo.get('equipos', [])),
-            'partidos_programados': len(partidos_torneo),
-            'partidos_jugados': len(partidos_jugados),
-            'porcentaje_completado': (len(partidos_jugados) / len(partidos_torneo)) * 100 if partidos_torneo else 0,
-            'goles_totales': sum(p['goles_local'] + p['goles_visitante'] for p in partidos_jugados),
-            'promedio_goles': (sum(p['goles_local'] + p['goles_visitante'] for p in partidos_jugados) / len(partidos_jugados)) if partidos_jugados else 0
-        })
-    
-    return sorted(stats, key=lambda x: x['porcentaje_completado'], reverse=True)
+        print(
+            f"{torneo['nombre'][:24]:<25} | {len(torneo.get('equipos', [])):<7} | "
+            f"{len(partidos_torneo):<8} | {len(partidos_jugados)/len(partidos_torneo)*100 if partidos_torneo else 0:.1f}%{'':<6} | "
+            f"{goles:<9} | {promedio:.2f}"
+        )
 
-def mostrar_estadisticas_equipos():
-    """Muestra en consola las estadísticas de equipos formateadas"""
-    stats = estadisticas_equipos()
-    if not stats:
+def mostrar_comparativa_equipos():
+    """Muestra comparativa entre equipos"""
+    equipos = cargar_datos(ARCHIVO_EQUIPOS)
+    partidos = cargar_datos(ARCHIVO_PARTIDOS)
+    
+    if len(equipos) < 2:
+        print("\nSe necesitan al menos 2 equipos para comparar")
         return
     
-    print("\n=== ESTADÍSTICAS DE EQUIPOS ===")
-    print("{:<25} {:<4} {:<4} {:<4} {:<4} {:<4} {:<4} {:<4} {:<4} {:<4} {:<4}".format(
-        'Equipo', 'PJ', 'PG', 'PE', 'PP', 'GF', 'GC', 'DG', 'Jug', 'VL', 'VV'))
-    print("-" * 85)
+    print("\n🔍 COMPARATIVA ENTRE EQUIPOS")
     
-    for eq in stats:
-        print("{:<25} {:<4} {:<4} {:<4} {:<4} {:<4} {:<4} {:<4} {:<4} {:<4} {:<4}".format(
-            eq['nombre'], eq['pj'], eq['pg'], eq['pe'], eq['pp'], 
-            eq['gf'], eq['gc'], eq['dg'], eq['jugadores'],
-            eq['victorias_local'], eq['victorias_visitante']))
-
-def mostrar_estadisticas_jugadores():
-    """Muestra en consola las estadísticas de jugadores formateadas"""
-    stats = estadisticas_jugadores()
-    if not stats:
-        return
+    # Mostrar lista de equipos
+    for i, equipo in enumerate(equipos, 1):
+        print(f"{i}. {equipo['nombre']}")
     
-    print("\n=== ESTADÍSTICAS DE JUGADORES ===")
-    print("{:<5} {:<25} {:<20} {:<15} {:<6} {:<5} {:<5} {:<4} {:<4} {:<6}".format(
-        'ID', 'Nombre', 'Equipo', 'Posición', 'Dorsal', 'Goles', 'Asis', 'TA', 'TR', 'Ratio'))
-    print("-" * 105)
-    
-    for jug in stats:
-        print("{:<5} {:<25} {:<20} {:<15} {:<6} {:<5} {:<5} {:<4} {:<4} {:<6.2f}".format(
-            jug['id'], jug['nombre'], jug['equipo'], jug['posicion'], 
-            jug['dorsal'], jug['goles'], jug['asistencias'], 
-            jug['tarjetas_amarillas'], jug['tarjetas_rojas'], jug['ratio_gol']))
-
-def mostrar_estadisticas_torneos():
-    """Muestra en consola las estadísticas de torneos formateadas"""
-    stats = estadisticas_torneos()
-    if not stats:
-        return
-    
-    print("\n=== ESTADÍSTICAS DE TORNEOS ===")
-    print("{:<5} {:<25} {:<15} {:<7} {:<7} {:<7} {:<10} {:<7} {:<7}".format(
-        'ID', 'Nombre', 'Tipo', 'Equipos', 'P Prog', 'P Jug', '% Compl', 'Goles', 'Prom'))
-    print("-" * 105)
-    
-    for t in stats:
-        print("{:<5} {:<25} {:<15} {:<7} {:<7} {:<7} {:<10.1f} {:<7} {:<7.2f}".format(
-            t['id'], t['nombre'], t['tipo'], t['equipos'], 
-            t['partidos_programados'], t['partidos_jugados'],
-            t['porcentaje_completado'], t['goles_totales'],
-            t['promedio_goles']))
+    # Seleccionar equipos a comparar
+    try:
+        opciones = input("\nSeleccione 2 equipos (ej: 1 3): ").split()
+        if len(opciones) != 2:
+            raise ValueError
+        
+        idx1, idx2 = map(int, opciones)
+        equipo1 = equipos[idx1-1]
+        equipo2 = equipos[idx2-1]
+        
+        # Comparar
+        print(f"\n🆚 COMPARANDO: {equipo1['nombre']} vs {equipo2['nombre']}")
+        
+        # Buscar partidos entre estos equipos
+        enfrentamientos = [
+            p for p in partidos 
+            if {p['local_id'], p['visitante_id']} == {equipo1['id'], equipo2['id']}
+            and p['resultado'] is not None
+        ]
+        
+        if not enfrentamientos:
+            print("No hay partidos jugados entre estos equipos")
+            return
+            
+        print(f"\n📅 Total enfrentamientos: {len(enfrentamientos)}")
+        
+        # Calcular resultados
+        victorias_equipo1 = 0
+        victorias_equipo2 = 0
+        empates = 0
+        
+        for p in enfrentamientos:
+            if p['goles_local'] > p['goles_visitante']:
+                if p['local_id'] == equipo1['id']:
+                    victorias_equipo1 += 1
+                else:
+                    victorias_equipo2 += 1
+            elif p['goles_visitante'] > p['goles_local']:
+                if p['visitante_id'] == equipo1['id']:
+                    victorias_equipo1 += 1
+                else:
+                    victorias_equipo2 += 1
+            else:
+                empates += 1
+        
+        print(f"\n🏆 Victorias: {equipo1['nombre']}: {victorias_equipo1} | {equipo2['nombre']}: {victorias_equipo2} | Empates: {empates}")
+        
+    except (ValueError, IndexError):
+        print("\n❌ Selección inválida. Debe ingresar 2 números válidos")

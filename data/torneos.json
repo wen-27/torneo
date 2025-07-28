@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "nombre": "liga",
+        "tipo": "Liga Local",
+        "fecha_inicio": "2007-07-23",
+        "fecha_fin": "2007-07-29",
+        "equipos": [
+            1,
+            2,
+            3,
+            4
+        ],
+        "partidos": []
+    }
+]

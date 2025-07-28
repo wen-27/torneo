@@ -30,9 +30,12 @@ from controllers.torneos import (
     listar_partidos
 )
 from controllers.estadisticas import (
-    estadisticas_equipos,
-    estadisticas_jugadores,
-    estadisticas_torneos      
+    mostrar_estadisticas_equipos_completas,
+    mostrar_estadisticas_jugadores_detalladas,
+    mostrar_maximos_goleadores,
+    mostrar_resumen_torneos,
+    mostrar_comparativa_equipos
+
 )
 from utils.menus import (
     menu_principal,
@@ -161,12 +164,16 @@ def main():
                 opcion = input("Seleccione una opción: ").strip()
 
                 if opcion == "1":
-                    estadisticas_equipos()
+                    mostrar_estadisticas_equipos_completas()
                 elif opcion == "2":
-                    estadisticas_jugadores()
+                    mostrar_estadisticas_jugadores_detalladas()
                 elif opcion == "3":
-                    estadisticas_torneos()
+                    mostrar_maximos_goleadores()
                 elif opcion == "4":
+                    mostrar_resumen_torneos()
+                elif opcion == "5":
+                    mostrar_comparativa_equipos()
+                elif opcion == "6":
                     break
                 else:
                     print("Opción inválida. Intente de nuevo.")

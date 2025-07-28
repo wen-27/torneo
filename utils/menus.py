@@ -72,12 +72,14 @@ menu_torneos = """
 """
 
 menu_estadisticas = """
-==============================
- Menú de Estadísticas
-==============================
-1. Estadísticas de equipos
-2. Estadísticas de jugadores
-3. Estadísticas de torneos
-4. Volver al menú principal
-==============================
+=====================================
+         MENÚ DE ESTADÍSTICAS        
+=====================================
+1. Estadísticas completas de equipos
+2. Estadísticas detalladas de jugadores
+3. Resumen de torneos y partidos
+4. Máximos goleadores y asistentes
+5. Comparativa entre equipos
+6. Volver al menú principal
+=====================================
 """

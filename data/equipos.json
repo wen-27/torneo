@@ -12,5 +12,19 @@
         "fundacion": "2023",
         "pais": "DJDKDK",
         "liga_id": 2
+    },
+    {
+        "id": 3,
+        "nombre": "parolo",
+        "fundacion": "2007",
+        "pais": "peru",
+        "liga_id": 3
+    },
+    {
+        "id": 4,
+        "nombre": "real",
+        "fundacion": "1990",
+        "pais": "formula1",
+        "liga_id": 4
     }
 ]
